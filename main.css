@@ -11,4 +11,7 @@
     border-radius: 5px;
     cursor: pointer;
     position: fixed;
+    touch-action: none;
+    top: 0;
+    left: 0;
 }
