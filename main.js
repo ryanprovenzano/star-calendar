@@ -1,32 +1,36 @@
+const input = document.getElementById("input");
+const output = document.getElementById("output");
+
 const card = document.getElementById('card');
 
-let newX = 0, newY = 0, oldX = 0, oldY = 0;
+let startX = 0, startY = 0, deltaX = 0, deltaY = 0;
 
 
-card.addEventListener('touchstart', touchStart);
-card.addEventListener("touchend", touchEnd);
+card.addEventListener('mousedown', mouseDown);
 
-function touchStart(e) {
-    startX = e.screenX;
-    startY = e.screenY;
+function mouseDown(e) {
+    startX = e.clientX;
+    startY = e.clientY;
 
-    card.addEventListener('touchmove', touchMove);
+    card.addEventListener('mousemove', mouseMove);
+    card.addEventListener("mouseup", mouseUp);
 }
 
-function touchMove(e) {
+function mouseMove(e) {
 
     // Get deltas
-    deltaX = startX - e.screenX;
-    deltaY = startY - e.screenY;
+    deltaX = startX - e.clientX;
+    deltaY = startY - e.clientY;
 
     // Store new mouse position
-    startX = e.screenX;
-    startY = e.screenY;
+    startX = e.clientX;
+    startY = e.clientY;
 
-    card.style.top = (card.offsetTop - newY) + 'px';
-    card.style.left = (card.offsetLeft - newX) + 'px';
+    card.style.top = (card.offsetTop - deltaY) + 'px'
+    card.style.left = (card.offsetLeft - deltaX) + 'px'
 }
 
-function touchEnd(e) {
-    card.removeEventListener('touchmove', touchMove);
+function mouseUp(e) {
+    card.removeEventListener('mousemove', mouseMove);
+    card.removeEventListener('mouseup', mouseUp);
 }

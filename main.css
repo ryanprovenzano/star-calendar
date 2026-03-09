@@ -1,7 +1,7 @@
 #container {
     background-color: blueviolet;
-    background-size: 4em 4em;
     height: 100vh;
+    width: 100vw;
 }
 
 #card {
