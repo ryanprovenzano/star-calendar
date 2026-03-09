@@ -1,3 +1,9 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
 #container {
     background-color: blueviolet;
     height: 100vh;
