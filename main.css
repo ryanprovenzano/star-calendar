@@ -1,0 +1,14 @@
+#container {
+    background-color: blueviolet;
+    background-size: 4em 4em;
+    height: 100vh;
+}
+
+#card {
+    width: 10%;
+    height: 10%;
+    background-color: aquamarine;
+    border-radius: 5px;
+    cursor: pointer;
+    position: fixed;
+}
