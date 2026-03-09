@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star Calendar</title>
+
+<style>
+body{
+    font-family: system-ui, sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+input, button{
+    font-size: 16px;
+    padding: 8px;
+}
+
+#output{
+    margin-top: 20px;
+    font-weight: bold;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Local Storage Demo</h1>
+
+<p>Enter some text. It will be saved in your browser.</p>
+
+<input id="input" placeholder="Type something">
+<button onclick="save()">Save</button>
+<button onclick="clearData()">Clear</button>
+
+<div id="output"></div>
+
+<script>
+
+const input = document.getElementById("input");
+const output = document.getElementById("output");
+
+function save(){
+    const value = input.value;
+    localStorage.setItem("savedText", value);
+    display();
+}
+
+function clearData(){
+    localStorage.removeItem("savedText");
+    display();
+}
+
+function display(){
+    const value = localStorage.getItem("savedText");
+    output.textContent = value ? "Saved value: " + value : "Nothing saved yet.";
+}
+
+display();
+
+</script>
+
+</body>
+</html>
