@@ -9,6 +9,10 @@ body {
     font-family: sans-serif;
     color: #fff;
     -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 #bg {
@@ -46,6 +50,7 @@ body {
     padding: 4px 12px;
     border-radius: 6px;
     cursor: pointer;
+    user-select: none;
 }
 
 #month-nav button:hover {
@@ -58,6 +63,7 @@ body {
     font-size: 1.1rem;
     font-weight: bold;
     letter-spacing: 0.05em;
+    user-select: none;
 }
 
 /* Calendar */
@@ -156,6 +162,7 @@ body {
     cursor: pointer;
     font-size: 1rem;
     line-height: 1;
+    user-select: none;
 }
 
 #add-tab:hover {
@@ -194,6 +201,7 @@ body {
     align-items: center;
     justify-content: center;
     container-type: size;
+    user-select: none;
 }
 
 .day-slot:hover {
@@ -259,6 +267,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
 }
 
 #star-btn:disabled,
@@ -340,6 +349,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    user-select: none;
 }
 
 #confirm-dialog p {
@@ -353,6 +363,7 @@ body {
     border: none;
     cursor: pointer;
     font-size: 0.95rem;
+    user-select: none;
 }
 
 #confirm-yes {

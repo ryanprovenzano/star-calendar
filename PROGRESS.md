@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-04-06 — v2.2.5
+
+### UI: Disable text selection on all elements
+
+**Problem:** Holding down or dragging across elements on mobile and desktop would trigger unwanted text selection, degrading the user experience.
+
+**Fix:**
+- Added `user-select: none` with vendor prefixes (`-webkit-user-select`, `-moz-user-select`, `-ms-user-select`) to the global `body` element.
+- Added `user-select: none` to all interactive elements: buttons, tabs, day slots, and the confirmation dialog.
+- This prevents text/image selection across the entire app on both desktop and mobile.
+
+**Key change:** `main.css` — body, button styles, and interactive elements; `index.html` — version bump
+
+---
+
 ## 2026-04-06 — v2.2.3
 
 ### Feature: Tab deletion with close button
