@@ -148,6 +148,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    container-type: size;
 }
 
 .day-slot:hover {
@@ -177,9 +178,9 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1.4rem;
+    font-size: 50cqmin;
     display: none;
-    animation: starWiggle 3s ease-in-out infinite;
+    animation: starWiggle 2.5s ease-in-out infinite;
 }
 
 .day-slot.has-star .star-in-slot {
@@ -317,8 +318,8 @@ body {
 
 /* Animations */
 @keyframes starWiggle {
-    0%, 100% { transform: translate(-50%, -50%) rotate(-8deg); }
-    50%       { transform: translate(-50%, -50%) rotate(8deg); }
+    0%, 100% { transform: translate(-50%, -50%) rotate(-16deg); }
+    50%       { transform: translate(-50%, -50%) rotate(16deg); }
 }
 
 @keyframes confettiFall {

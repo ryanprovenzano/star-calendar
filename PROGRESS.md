@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-04-06 — v2.1.6
+
+### UI: Star scaling relative to day slot size
+
+**Problem:** The star in the day slot had a fixed `1.4rem` font size, which didn't adapt well to different screen sizes or orientations.
+
+**Fix:**
+- Added `container-type: size` to `.day-slot` to enable container queries.
+- Set `.star-in-slot` `font-size` to `50cqmin`, ensuring the star always scales to 50% of its container's smallest dimension.
+- Adjusted `starWiggle` duration from `3s` to `2.5s` for a slightly more energetic idle animation.
+
+**Key change:** `main.css` — `.day-slot`, `.star-in-slot` (font-size and animation duration)
+
+---
+
 ## 2026-04-06 — v2.1.5
 
 ### Bug Fix: Animation resets on multiple clicks
