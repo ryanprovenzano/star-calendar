@@ -5,14 +5,48 @@
     <meta charset="UTF-8">
     <title>Star Calendar</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel='stylesheet' type="text/css" media="screen" href="main.css?v=1.0.1">
+    <link rel='stylesheet' type="text/css" media="screen" href="main.css?v=2.0.0">
 </head>
 
 <body>
-    <div id="container">
-        <div id="card"></div>
+    <div id="bg"></div>
+    <div id="app">
+        <div id="month-nav">
+            <button id="prev-month">←</button>
+            <div id="month-title"></div>
+            <button id="next-month">→</button>
+        </div>
+        <div id="calendar">
+            <div id="tabs-bar"></div>
+            <div id="dow-row">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+            </div>
+            <div id="day-grid"></div>
+        </div>
+        <div id="controls">
+            <button id="star-btn">★</button>
+            <div id="meter">
+                <div id="meter-fill"></div>
+            </div>
+            <button id="clear-btn">✕</button>
+        </div>
     </div>
+    <div id="confetti-layer"></div>
+    <div id="flying-star">★</div>
+    <div id="confirm-overlay">
+        <div id="confirm-dialog">
+            <p>Clear star from this day?</p>
+            <button id="confirm-yes">Yes</button>
+            <button id="confirm-no">No</button>
+        </div>
+    </div>
+    <script src='main.js?v=2.0.0'></script>
 </body>
-<script src='main_mobile.js?v=1.0.1'></script>
 
 </html>

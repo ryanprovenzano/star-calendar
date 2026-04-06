@@ -1,23 +1,322 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 0;
     overflow: hidden;
+    font-family: sans-serif;
+    color: #fff;
 }
 
-#container {
-    background-color: rgb(160, 106, 210);
-    height: 100vh;
-    width: 100vw;
+#bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(135deg, #1a1a4e 0%, #2d1b69 40%, #0d3b6e 100%);
 }
 
-#card {
-    width: 10%;
-    height: 10%;
-    background-color: rgb(240, 226, 33);
+#app {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    gap: 8px;
+}
+
+/* Month Navigation */
+#month-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+#month-nav button {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-size: 1.2rem;
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#month-nav button:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+#month-title {
+    width: 60%;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+}
+
+/* Calendar */
+#calendar {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* Tabs */
+#tabs-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 8px;
+    background: rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+.tab {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 3px 10px;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 0.8rem;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.tab.active {
+    border: 2px solid #fff;
+    background: rgba(255, 255, 255, 0.25);
+    font-weight: bold;
+}
+
+#add-tab {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px dashed rgba(255, 255, 255, 0.4);
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+#add-tab:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+/* Day-of-week row */
+#dow-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+}
+
+#dow-row div {
+    text-align: center;
+    font-size: 0.7rem;
+    padding: 4px 0;
+    opacity: 0.7;
+    letter-spacing: 0.03em;
+}
+
+/* Day Grid */
+#day-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.day-slot {
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.day-slot:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.day-slot.selected {
+    border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.day-slot.empty-pad {
+    border: none;
+    cursor: default;
+    pointer-events: none;
+}
+
+.day-number {
+    position: absolute;
+    top: 3px;
+    left: 5px;
+    font-size: 0.65rem;
+    opacity: 0.7;
+}
+
+.star-in-slot {
+    font-size: 1.4rem;
+    display: none;
+    animation: starWiggle 3s ease-in-out infinite;
+}
+
+.day-slot.has-star .star-in-slot {
+    display: block;
+}
+
+/* Controls */
+#controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    padding: 4px 0;
+}
+
+#star-btn,
+#clear-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: #fff;
+    font-size: 1.4rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#star-btn:disabled,
+#clear-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+#star-btn:not(:disabled):hover,
+#clear-btn:not(:disabled):hover {
+    background: rgba(255, 255, 255, 0.28);
+}
+
+#meter {
+    flex-grow: 1;
+    height: 20px;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+#meter-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.15s ease;
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+    border-radius: 10px;
+}
+
+/* Flying Star */
+#flying-star {
     position: fixed;
-    touch-action: none;
-    top: 0;
-    left: 0;
+    font-size: 2rem;
+    z-index: 100;
+    display: none;
+    pointer-events: none;
+}
+
+/* Confetti */
+#confetti-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.confetti-particle {
+    position: absolute;
+    top: -10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    animation: confettiFall linear forwards;
+}
+
+/* Confirm overlay */
+#confirm-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+#confirm-overlay.visible {
+    display: flex;
+}
+
+#confirm-dialog {
+    background: #1e1e4e;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 24px 32px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#confirm-dialog p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+#confirm-dialog button {
+    padding: 8px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+#confirm-yes {
+    background: #e05555;
+    color: #fff;
+}
+
+#confirm-no {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+/* Animations */
+@keyframes starWiggle {
+    0%, 100% { transform: rotate(-8deg); }
+    50%       { transform: rotate(8deg); }
+}
+
+@keyframes confettiFall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
 }
