@@ -109,6 +109,10 @@ function renderTabs() {
         el.title = tab.name;
         el.addEventListener('click', () => {
             state.selectedTab = i;
+            stopDecay();
+            state.meter.value = 0;
+            state.meter.gradient = null;
+            meterFill.style.background = '';
             renderTabs();
             renderCalendar();
             updateControls();

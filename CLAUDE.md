@@ -46,3 +46,7 @@ Git history shows iterative testing of event handling (switching between mouse a
 - **Test desktop dragging**: Open in a desktop browser and drag the yellow card
 - **Test mobile dragging**: Open on mobile device or use browser DevTools device emulation
 - **Debug event handling**: Check browser console for event listener conflicts or missing preventDefaults
+
+## Session Log
+
+@PROGRESS.md

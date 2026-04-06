@@ -31,6 +31,16 @@
 
 ---
 
+### Bug Fix: Tab switch doesn't reset meter — one-tap earn on new tab
+
+**Problem:** After completing a star animation the meter stays at `max` (20). Switching tabs didn't reset it. The newly-selected day on the new tab has no star, so the star button is enabled. One tap adds 1 → value hits 21 ≥ 20 → `triggerStarEarned` fires immediately.
+
+**Fix:** Added `stopDecay()` + meter/gradient reset inside the tab click handler in `renderTabs`, mirroring what the month-navigation buttons already do.
+
+**Key change:** `main.js` — `renderTabs` tab click handler
+
+---
+
 ## 2026-04-06 — v2.1.1
 
 ### Bug Fix: Meter not resetting on day switch / one-tap earn
