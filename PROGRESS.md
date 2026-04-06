@@ -2,6 +2,35 @@
 
 ---
 
+## 2026-04-06 — v2.1.2
+
+### Bug Fix: Mobile portrait — enforce square calendar slots
+
+**Problem:** `#calendar` had `flex-grow: 1`, stretching to fill the full screen height and making day slots tall rectangles in portrait. The star/meter/✕ controls were pinned to the bottom with no breathing room.
+
+**Fix:**
+- Portrait media query: `#calendar { flex-grow: 0 }` so the calendar sizes to content only
+- `#day-grid { grid-auto-rows: calc((100vw - 16px) / 7) }` — row height = column width → square slots
+- `#controls { flex-grow: 1 }` — fills remaining screen space; `align-items: center` (already set) vertically centres the controls in that space
+
+---
+
+### Bug Fix: Mobile landscape — starred slots taller than empty slots
+
+**Problem:** `.star-in-slot` was in normal flow. Rows containing a star sized to the star's height (`1.4rem`); empty rows got the leftover space. This made starred slots visibly taller and uneven.
+
+**Fix:** Made `.star-in-slot` `position: absolute` (matching `.day-number`). Now it has zero impact on row sizing; all rows get equal height from `align-content: stretch`. Updated `@keyframes starWiggle` to include `translate(-50%, -50%)` so the absolute-centred star still wiggles correctly.
+
+---
+
+### Layout: Landscape calendar narrowed to 80% screen width
+
+**Problem:** In landscape the calendar spanned full screen width, making the 7-column slots very wide and short (non-square).
+
+**Fix:** Landscape media query: `#app { left: 10%; right: 10% }` — overrides `inset: 0` to constrain the app to 80% of screen width, centred, giving slots a better aspect ratio.
+
+---
+
 ## 2026-04-06 — v2.1.1
 
 ### Bug Fix: Meter not resetting on day switch / one-tap earn
