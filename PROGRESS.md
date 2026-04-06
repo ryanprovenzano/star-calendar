@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-04-06 — v2.1.3
+
+### UI: Update website background and version bump
+
+**Change:**
+- Replaced `#bg` linear-gradient with `website-background.png`.
+- Background set to `no-repeat center center` and `background-size: cover`.
+- Incremented CSS and JS versions to `v=2.1.3` in `index.html` to force browser cache busting.
+
+---
+
 ## 2026-04-06 — v2.1.2
 
 ### Bug Fix: Mobile portrait — enforce square calendar slots
