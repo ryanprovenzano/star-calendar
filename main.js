@@ -17,6 +17,7 @@ const state = {
         max: 20,
         gradient: null,
         decayTimer: null,
+        isEarning: false,
     },
 };
 
@@ -253,10 +254,10 @@ function updateControls() {
     }
 
     const hasStar = !!tab.stars[selectedDate];
-    if (hasStar) {
+    if (hasStar || state.meter.isEarning) {
         starBtn.disabled = true;
-        clearBtn.disabled = false;
-        setMeterDisplay(state.meter.max);
+        clearBtn.disabled = hasStar ? false : true;
+        setMeterDisplay(hasStar ? state.meter.max : state.meter.value);
     } else {
         starBtn.disabled = false;
         clearBtn.disabled = true;
@@ -298,7 +299,7 @@ function stopDecay() {
 // ── Star Button ───────────────────────────────────────────────────────────────
 
 starBtn.addEventListener('click', () => {
-    if (!state.selectedDate) return;
+    if (!state.selectedDate || state.meter.isEarning) return;
     const tab = currentTab();
     if (tab.stars[state.selectedDate]) return;
 
@@ -322,7 +323,9 @@ starBtn.addEventListener('click', () => {
 // ── Star Earned ───────────────────────────────────────────────────────────────
 
 function triggerStarEarned() {
+    state.meter.isEarning = true;
     stopDecay();
+    updateControls();
 
     const tab = currentTab();
     const earnedKey = state.selectedDate; // capture now — selectedDate may change during animation
@@ -369,17 +372,13 @@ function triggerStarEarned() {
     });
 
     anim.onfinish = () => {
+        state.meter.isEarning = false;
         flyingStar.style.display = 'none';
         // Commit the star only when animation lands
         tab.stars[earnedKey] = true;
         saveData();
         renderCalendar();
-        // Only update controls if the earned day is still selected
-        if (state.selectedDate === earnedKey) {
-            setMeterDisplay(state.meter.max);
-            starBtn.disabled = true;
-            clearBtn.disabled = false;
-        }
+        updateControls();
     };
 }
 

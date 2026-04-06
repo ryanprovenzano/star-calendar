@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-04-06 — v2.1.5
+
+### Bug Fix: Animation resets on multiple clicks
+
+**Problem:** Clicking the star button while a star animation is already in progress would trigger the animation again, causing it to reset.
+
+**Fix:** Added `state.meter.isEarning` flag to track when an animation is in progress. The star button is now disabled immediately when `triggerStarEarned` starts and is only re-enabled (if applicable) when the animation finishes. The click listener also checks this flag for robustness.
+
+**Key change:** `main.js` — `state` definition, `updateControls`, `triggerStarEarned`, `starBtn` listener
+
+---
+
 ## 2026-04-06 — v2.1.4
 
 ### UI: Update horizontal background and version bump
