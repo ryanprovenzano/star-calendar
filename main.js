@@ -109,6 +109,7 @@ function renderTabs() {
         el.textContent = tab.name;
         el.title = tab.name;
         el.addEventListener('click', () => {
+            if (state.selectedTab === i) return;
             state.selectedTab = i;
             stopDecay();
             state.meter.value = 0;

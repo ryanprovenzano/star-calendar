@@ -2,6 +2,30 @@
 
 ---
 
+## 2026-04-06 — v2.2.2
+
+### UI: Desktop tabs grow to fit content
+
+**Problem:** Tabs on desktop had a fixed `max-width: 80px`, causing longer names to be truncated with ellipsis even when there was plenty of screen space.
+
+**Fix:** Removed `max-width` and `overflow` constraints from `.tab` by default. Re-applied them specifically for touch devices using `@media (pointer: coarse)` to maintain a compact layout on mobile.
+
+**Key change:** `main.css` — `.tab` styling; `index.html` — version bump
+
+---
+
+## 2026-04-06 — v2.2.1
+
+### Bug Fix: Desktop tab renaming (dblclick)
+
+**Problem:** Double-clicking a tab to rename it on desktop was failing. The first click was triggering a full `renderTabs()` which rebuilt the button elements, causing the second click to land on a new element and preventing the `dblclick` event from firing.
+
+**Fix:** Added an early return in the tab `click` listener if the clicked tab is already the `selectedTab`. This avoids redundant re-renders and preserves the DOM element, allowing the `dblclick` event to proceed naturally.
+
+**Key change:** `main.js` — `renderTabs` click listener; `index.html` — version bump
+
+---
+
 ## 2026-04-06 — v2.2.0
 
 ### UI: Highlight current day in calendar
@@ -10,7 +34,7 @@
 
 **Fix:**
 - Added `today` class to the current day's slot in `main.js`.
-- Styled `.day-slot.today` in `main.css` with a slightly more opaque background (`rgba(255, 255, 255, 0.15)`) to make it stand out from other slots.
+- Styled `.day-slot.today` in `main.css` with a more opaque background (`rgba(255, 255, 255, 0.25)`) to make it stand out from other slots.
 - Incremented CSS and JS versions to `v2.2.0` in `index.html`.
 
 **Key change:** `main.js` — `renderCalendar` loop; `main.css` — `.day-slot.today`; `index.html` — version bump
