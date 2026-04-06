@@ -2,6 +2,67 @@
 
 ---
 
+## 2026-04-06 — v2.2.0
+
+### UI: Highlight current day in calendar
+
+**Problem:** It was hard to distinguish which day was "today" at a glance unless it was the selected one.
+
+**Fix:**
+- Added `today` class to the current day's slot in `main.js`.
+- Styled `.day-slot.today` in `main.css` with a slightly more opaque background (`rgba(255, 255, 255, 0.15)`) to make it stand out from other slots.
+- Incremented CSS and JS versions to `v2.2.0` in `index.html`.
+
+**Key change:** `main.js` — `renderCalendar` loop; `main.css` — `.day-slot.today`; `index.html` — version bump
+
+---
+
+## 2026-04-06 — v2.1.9
+
+### Feature: Smart reticle on month switch
+
+**Problem:** Switching months would leave the reticle on the same day number (e.g., the 10th) even if the user had moved to a different month where that day isn't what they intended to interact with, or it would just stay on a date that doesn't exist in the current view.
+
+**Fix:**
+- Added `updateSelectionForMonth()` helper.
+- When navigating months, the reticle now automatically selects today's date if the target month is the current real-world month.
+- If navigating to any other month, the reticle is cleared (unselected).
+- Incremented CSS and JS versions to `v2.1.9` in `index.html`.
+
+**Key change:** `main.js` — `updateSelectionForMonth` and navigation listeners; `index.html` — version bump
+
+---
+
+## 2026-04-06 — v2.1.8
+
+### Feature: Default selection to today's date
+
+**Problem:** Opening the calendar resulted in no day being selected, requiring a manual click before stars could be earned or cleared.
+
+**Fix:**
+- Updated Init section in `main.js` to set `state.selectedDate` to today's date on startup using `dateKey()`.
+- Incremented CSS and JS versions to `v2.1.8` in `index.html`.
+
+**Key change:** `main.js` — `Init` block; `index.html` — version bump
+
+---
+
+## 2026-04-06 — v2.1.7
+
+### UI: Smoother star bar decay and reduced threshold
+
+**Problem:** The star bar decay felt chunky (once every 2s) and requiring 20 clicks felt slightly too high for a quick interaction.
+
+**Fix:**
+- Increased decay frequency to 30fps (33ms interval) for a smoother "bleeding" effect.
+- Adjusted decay rate to ~1 unit per second (`-0.033` per tick).
+- Reduced `state.meter.max` from 20 to 16 (a 20% reduction) to make earning stars faster.
+- Incremented CSS and JS versions to `v=2.1.7` in `index.html`.
+
+**Key change:** `main.js` — `state.meter.max`, `startDecay`; `index.html` — version bump
+
+---
+
 ## 2026-04-06 — v2.1.6
 
 ### UI: Star scaling relative to day slot size

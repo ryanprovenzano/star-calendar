@@ -14,7 +14,7 @@ const state = {
     ],
     meter: {
         value: 0,
-        max: 20,
+        max: 16,
         gradient: null,
         decayTimer: null,
         isEarning: false,
@@ -193,11 +193,13 @@ function renderCalendar() {
         const key = dateKey(year, currentMonth, d);
         const hasStar = !!tab.stars[key];
         const isSelected = state.selectedDate === key;
+        const isToday = key === dateKey(now.getFullYear(), now.getMonth(), now.getDate());
 
         const slot = document.createElement('div');
         slot.className = 'day-slot' +
             (hasStar ? ' has-star' : '') +
-            (isSelected ? ' selected' : '');
+            (isSelected ? ' selected' : '') +
+            (isToday ? ' today' : '');
         slot.dataset.key = key;
 
         const num = document.createElement('span');
@@ -284,9 +286,9 @@ function startDecay() {
             meterFill.style.background = '';
             return;
         }
-        state.meter.value -= 1;
+        state.meter.value -= 0.033;
         setMeterDisplay(state.meter.value);
-    }, 2000);
+    }, 33);
 }
 
 function stopDecay() {
@@ -429,6 +431,14 @@ confirmNo.addEventListener('click', () => {
 
 // ── Month Navigation ──────────────────────────────────────────────────────────
 
+function updateSelectionForMonth() {
+    if (state.year === now.getFullYear() && state.currentMonth === now.getMonth()) {
+        state.selectedDate = dateKey(state.year, state.currentMonth, now.getDate());
+    } else {
+        state.selectedDate = null;
+    }
+}
+
 prevMonthBtn.addEventListener('click', () => {
     if (state.currentMonth === 0) {
         state.currentMonth = 11;
@@ -436,6 +446,7 @@ prevMonthBtn.addEventListener('click', () => {
     } else {
         state.currentMonth -= 1;
     }
+    updateSelectionForMonth();
     stopDecay();
     state.meter.value = 0;
     state.meter.gradient = null;
@@ -451,6 +462,7 @@ nextMonthBtn.addEventListener('click', () => {
     } else {
         state.currentMonth += 1;
     }
+    updateSelectionForMonth();
     stopDecay();
     state.meter.value = 0;
     state.meter.gradient = null;
@@ -462,6 +474,7 @@ nextMonthBtn.addEventListener('click', () => {
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 loadData();
+state.selectedDate = dateKey(now.getFullYear(), now.getMonth(), now.getDate());
 renderTabs();
 renderCalendar();
 updateControls();

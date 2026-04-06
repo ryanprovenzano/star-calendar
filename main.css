@@ -155,6 +155,10 @@ body {
     background: rgba(255, 255, 255, 0.08);
 }
 
+.day-slot.today {
+    background: rgba(255, 255, 255, 0.15);
+}
+
 .day-slot.selected {
     border: 2px solid rgba(255, 255, 255, 0.8);
 }
