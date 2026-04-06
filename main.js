@@ -321,13 +321,12 @@ function triggerStarEarned() {
     stopDecay();
 
     const tab = currentTab();
-    tab.stars[state.selectedDate] = true;
-    saveData();
+    const earnedKey = state.selectedDate; // capture now — selectedDate may change during animation
 
     spawnConfetti();
 
     // Get target slot position before re-render
-    const slot = getSlotElement(state.selectedDate);
+    const slot = getSlotElement(earnedKey);
     const rect = slot ? slot.getBoundingClientRect() : null;
     const targetX = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
     const targetY = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;
@@ -367,11 +366,16 @@ function triggerStarEarned() {
 
     anim.onfinish = () => {
         flyingStar.style.display = 'none';
+        // Commit the star only when animation lands
+        tab.stars[earnedKey] = true;
+        saveData();
         renderCalendar();
-        // Keep meter full to show earned state
-        setMeterDisplay(state.meter.max);
-        starBtn.disabled = true;
-        clearBtn.disabled = false;
+        // Only update controls if the earned day is still selected
+        if (state.selectedDate === earnedKey) {
+            setMeterDisplay(state.meter.max);
+            starBtn.disabled = true;
+            clearBtn.disabled = false;
+        }
     };
 }
 
