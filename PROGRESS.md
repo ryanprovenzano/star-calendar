@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-04-06 — v2.1.4
+
+### UI: Update horizontal background and version bump
+
+**Change:**
+- Added landscape media query to use `website-background-horizontal.png` for `#bg`.
+- Incremented CSS and JS versions to `v=2.1.4` in `index.html`.
+
+---
+
 ## 2026-04-06 — v2.1.3
 
 ### UI: Update website background and version bump

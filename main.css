@@ -344,6 +344,10 @@ body {
 
 /* ── Landscape: narrow calendar to ~80% width so slots are squarer ── */
 @media (orientation: landscape) {
+    #bg {
+        background-image: url('website-background-horizontal.png');
+    }
+
     #app {
         left: 10%;
         right: 10%;
