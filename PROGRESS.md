@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-04-06 — v2.2.3
+
+### Feature: Tab deletion with close button
+
+**Problem:** Users couldn't delete tabs once created. The app accumulated unwanted tabs with no way to clean them up.
+
+**Fix:**
+- Added a close button (✕) to each tab that appears on hover (desktop) or always on active tab (mobile via `.tab-close` styling).
+- Tab close button only shows when there are 2+ tabs (preserve at least one).
+- Clicking close shows a confirmation dialog: `Delete "[tab name]"?` using a generalized `showConfirm()` function.
+- Refactored the confirmation overlay to be reusable for both tab deletion and star clearing.
+- Updated `loadData()` to simplify tab merging logic (direct replace instead of merging by ID).
+- Added `id="confirm-msg"` to the dialog message for dynamic text.
+
+**Key change:** `main.js` — `renderTabs` (added close button), refactored `showConfirm()` and confirmation listeners; `main.css` — added `.tab-close` styling; `index.html` — added `id="confirm-msg"`
+
+---
+
 ## 2026-04-06 — v2.2.2
 
 ### UI: Desktop tabs grow to fit content

@@ -40,16 +40,9 @@ function loadData() {
             // Year rollover — clear all stars
             return;
         }
-        // Merge saved tabs (preserve names and stars)
-        saved.tabs.forEach((savedTab) => {
-            const tab = state.tabs.find(t => t.id === savedTab.id);
-            if (tab) {
-                tab.name = savedTab.name;
-                tab.stars = savedTab.stars || {};
-            } else {
-                state.tabs.push(savedTab);
-            }
-        });
+        if (saved.tabs && saved.tabs.length > 0) {
+            state.tabs = saved.tabs;
+        }
     } catch (e) {
         // Ignore corrupt data
     }
@@ -106,8 +99,35 @@ function renderTabs() {
     state.tabs.forEach((tab, i) => {
         const el = document.createElement('button');
         el.className = 'tab' + (i === state.selectedTab ? ' active' : '');
-        el.textContent = tab.name;
         el.title = tab.name;
+
+        const nameLabel = document.createElement('span');
+        nameLabel.textContent = tab.name;
+        el.appendChild(nameLabel);
+
+        // Only show close button if more than one tab
+        if (state.tabs.length > 1) {
+            const closeBtn = document.createElement('span');
+            closeBtn.className = 'tab-close';
+            closeBtn.textContent = '✕';
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // prevent switching tab
+                showConfirm(`Delete "${tab.name}"?`, () => {
+                    state.tabs.splice(i, 1);
+                    if (state.selectedTab === i) {
+                        state.selectedTab = 0;
+                    } else if (state.selectedTab > i) {
+                        state.selectedTab -= 1;
+                    }
+                    saveData();
+                    renderTabs();
+                    renderCalendar();
+                    updateControls();
+                });
+            });
+            el.appendChild(closeBtn);
+        }
+
         el.addEventListener('click', () => {
             if (state.selectedTab === i) return;
             state.selectedTab = i;
@@ -401,33 +421,48 @@ function spawnConfetti() {
     setTimeout(() => { confettiLayer.innerHTML = ''; }, 4000);
 }
 
+// ── Confirmation Overlay ──────────────────────────────────────────────────────
+
+let confirmCallback = null;
+
+function showConfirm(msg, onYes) {
+    document.getElementById('confirm-msg').textContent = msg;
+    confirmCallback = onYes;
+    confirmOverlay.classList.add('visible');
+}
+
+confirmYes.addEventListener('click', () => {
+    if (confirmCallback) confirmCallback();
+    confirmOverlay.classList.remove('visible');
+    confirmCallback = null;
+});
+
+confirmNo.addEventListener('click', () => {
+    confirmOverlay.classList.remove('visible');
+    confirmCallback = null;
+});
+
 // ── Clear Button ──────────────────────────────────────────────────────────────
 
 clearBtn.addEventListener('click', () => {
     if (!state.selectedDate) return;
     const tab = currentTab();
     if (!tab.stars[state.selectedDate]) return;
-    confirmOverlay.classList.add('visible');
-});
 
-confirmYes.addEventListener('click', () => {
-    const tab = currentTab();
-    delete tab.stars[state.selectedDate];
-    saveData();
-    confirmOverlay.classList.remove('visible');
+    showConfirm('Clear star from this day?', () => {
+        const tab = currentTab();
+        delete tab.stars[state.selectedDate];
+        saveData();
 
-    // Reset meter
-    stopDecay();
-    state.meter.value = 0;
-    state.meter.gradient = null;
-    meterFill.style.background = '';
+        // Reset meter
+        stopDecay();
+        state.meter.value = 0;
+        state.meter.gradient = null;
+        meterFill.style.background = '';
 
-    renderCalendar();
-    updateControls();
-});
-
-confirmNo.addEventListener('click', () => {
-    confirmOverlay.classList.remove('visible');
+        renderCalendar();
+        updateControls();
+    });
 });
 
 // ── Month Navigation ──────────────────────────────────────────────────────────
