@@ -121,6 +121,29 @@ function renderTabs() {
                 renderTabs();
             }
         });
+
+        // Long-press to rename on touch devices
+        let pressTimer = null;
+        let longPressed = false;
+        el.addEventListener('touchstart', () => {
+            longPressed = false;
+            pressTimer = setTimeout(() => {
+                longPressed = true;
+                const newName = prompt('Rename tab:', tab.name);
+                if (newName && newName.trim()) {
+                    tab.name = newName.trim();
+                    saveData();
+                    renderTabs();
+                }
+            }, 600);
+        }, { passive: true });
+        el.addEventListener('touchend', (e) => {
+            clearTimeout(pressTimer);
+            if (longPressed) e.preventDefault();
+        }, { passive: false });
+        el.addEventListener('touchmove', () => {
+            clearTimeout(pressTimer);
+        }, { passive: true });
         tabsBar.appendChild(el);
     });
 
@@ -194,7 +217,20 @@ function getSlotElement(key) {
 // ── Day click ─────────────────────────────────────────────────────────────────
 
 function onDayClick(key) {
+    const prevKey = state.selectedDate;
     state.selectedDate = key;
+
+    // Reset meter when switching to a different day that hasn't earned a star
+    if (key !== prevKey) {
+        const tab = currentTab();
+        if (!tab.stars[key]) {
+            stopDecay();
+            state.meter.value = 0;
+            state.meter.gradient = null;
+            meterFill.style.background = '';
+        }
+    }
+
     renderCalendar();
     updateControls();
 }
@@ -296,26 +332,38 @@ function triggerStarEarned() {
     const targetX = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
     const targetY = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;
 
-    // Start flying star from random edge
-    const edge = Math.floor(Math.random() * 4);
-    let startX, startY;
-    if (edge === 0) { startX = Math.random() * window.innerWidth; startY = -60; }
-    else if (edge === 1) { startX = window.innerWidth + 60; startY = Math.random() * window.innerHeight; }
-    else if (edge === 2) { startX = Math.random() * window.innerWidth; startY = window.innerHeight + 60; }
-    else { startX = -60; startY = Math.random() * window.innerHeight; }
+    // Build spiral keyframes: orbit target from off-screen, tightening each loop
+    const numKF = 30;
+    const initialRadius = Math.max(window.innerWidth, window.innerHeight) * 0.8;
+    const startAngle = Math.random() * Math.PI * 2;
+    const rotations = 1.75; // full circles before landing
+
+    const keyframes = [];
+    for (let i = 0; i <= numKF; i++) {
+        const t = i / numKF;
+        const radius = initialRadius * Math.pow(1 - t, 1.5);
+        const angle = startAngle + t * rotations * Math.PI * 2;
+        const x = targetX + radius * Math.cos(angle);
+        const y = targetY + radius * Math.sin(angle);
+        const size = 1.6 + 1.6 * (1 - t); // 3.2rem far → 1.6rem at landing
+        const spin = t * 540; // 1.5 rotations of the star itself
+        keyframes.push({
+            left: x + 'px',
+            top: y + 'px',
+            fontSize: size + 'rem',
+            transform: `translate(-50%, -50%) rotate(${spin}deg)`,
+            opacity: t < 0.08 ? t / 0.08 : 1,
+            offset: t,
+        });
+    }
 
     flyingStar.style.display = 'block';
-    flyingStar.style.left = startX + 'px';
-    flyingStar.style.top = startY + 'px';
-    flyingStar.style.transform = 'translate(-50%, -50%)';
 
-    const anim = flyingStar.animate(
-        [
-            { left: startX + 'px', top: startY + 'px', opacity: 1, fontSize: '2rem' },
-            { left: targetX + 'px', top: targetY + 'px', opacity: 1, fontSize: '1.6rem' },
-        ],
-        { duration: 1200, easing: 'ease-in-out', fill: 'forwards' }
-    );
+    const anim = flyingStar.animate(keyframes, {
+        duration: 2200,
+        easing: 'linear',
+        fill: 'forwards',
+    });
 
     anim.onfinish = () => {
         flyingStar.style.display = 'none';
