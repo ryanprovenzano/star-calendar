@@ -172,6 +172,10 @@ body {
 }
 
 .star-in-slot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 1.4rem;
     display: none;
     animation: starWiggle 3s ease-in-out infinite;
@@ -312,11 +316,35 @@ body {
 
 /* Animations */
 @keyframes starWiggle {
-    0%, 100% { transform: rotate(-8deg); }
-    50%       { transform: rotate(8deg); }
+    0%, 100% { transform: translate(-50%, -50%) rotate(-8deg); }
+    50%       { transform: translate(-50%, -50%) rotate(8deg); }
 }
 
 @keyframes confettiFall {
     0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
     100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ── Portrait: square slots, controls centred in remaining space ── */
+@media (orientation: portrait) {
+    #calendar {
+        flex-grow: 0;
+    }
+
+    #day-grid {
+        /* Each slot width = (100vw - 16px app padding) / 7 columns → square */
+        grid-auto-rows: calc((100vw - 16px) / 7);
+    }
+
+    #controls {
+        flex-grow: 1;
+    }
+}
+
+/* ── Landscape: narrow calendar to ~80% width so slots are squarer ── */
+@media (orientation: landscape) {
+    #app {
+        left: 10%;
+        right: 10%;
+    }
 }
